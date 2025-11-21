@@ -139,10 +139,10 @@ Preencha a tabela abaixo com os resultados de pelo menos 3 testes diferentes:
 
 | Descrição do Teste | Total de Acessos | Page Faults FIFO | Page Faults Clock | Diferença |
 |-------------------|------------------|------------------|-------------------|-----------|
-| Teste 1 - Básico  |                  |                  |                   |           |
-| Teste 2 - Memória Pequena |          |                  |                   |           |
-| Teste 3 - Simples |                  |                  |                   |           |
-| Teste Próprio 1   |                  |                  |                   |           |
+| Teste 1 - Básico  |        8          |            5      |           5        |       0    |
+| Teste 2 - Memória Pequena |      10    |            10      |       10            |    0       |
+| Teste 3 - Simples |        7          |          4        |              4     |     0      |
+| Teste Próprio 1   |          8        |        5          |          5         |     0      |
 
 ### 3.2 Análise
 
