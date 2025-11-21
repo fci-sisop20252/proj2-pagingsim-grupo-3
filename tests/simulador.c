@@ -1,16 +1,3 @@
-/* simulador.c
- *
- * Simulador de Memória Virtual com Paginação
- * Suporta algoritmos: fifo e clock
- *
- * Uso:
- *   ./simulador <fifo|clock> <arquivo_config> <arquivo_acessos>
- *
- * (Implementado conforme especificação do ENUNCIADO.md)
- *
- * Autor: gerado por assistente (ajuste livre)
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
