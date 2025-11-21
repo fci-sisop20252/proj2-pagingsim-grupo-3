@@ -2,15 +2,12 @@
 
 **Disciplina:** Sistemas Operacionais
 **Professor:** Lucas Figueiredo
-**Data:**
+**Data:** 21/11
 
 ## Integrantes do Grupo
 
-- Nome Completo - Matrícula
-- Nome Completo - Matrícula
-- Nome Completo - Matrícula
-- Nome Completo - Matrícula
-
+- Felipe Martha - 10437877
+- Guilhermo Martinez - 10418697
 ---
 
 ## 1. Instruções de Compilação e Execução
@@ -54,33 +51,50 @@ Descreva as estruturas de dados que você escolheu para representar:
 
 **Tabela de Páginas:**
 - Qual estrutura usou? (array, lista, hash map, etc.)
+Resposta: Array dinâmico de structs PageEntry dentro de cada struct Process
 - Quais informações armazena para cada página?
+Resposta: Número do frame, bit de validade (V) e bit de referência (R)
 - Como organizou para múltiplos processos?
+Resposta: Um array global de Process, onde cada processo possui seu próprio array pages indexado pelo número da página virtual
 - **Justificativa:** Por que escolheu essa abordagem?
+Resposta: Acesso direto O(1) pelo índice da página e isolamento simples da memória de cada processo
 
 **Frames Físicos:**
 - Como representou os frames da memória física?
+Resposta: Array global de structs Frame
 - Quais informações armazena para cada frame?
+Resposta: Status de ocupação, PID do dono, número da página virtual mapeada e cópia do bit R
 - Como rastreia frames livres vs ocupados?
+Resposta: Campo inteiro occupied (0 para livre, 1 para ocupado)
 - **Justificativa:** Por que escolheu essa abordagem?
+Resposta: Permite mapeamento reverso rápido (saber qual página desalocar dado um frame) e acesso O(1) pelo índice do frame
 
 **Estrutura para FIFO:**
 - Como mantém a ordem de chegada das páginas?
+Resposta: Fila circular (Circular Queue) implementada com array
 - Como identifica a página mais antiga?
+Resposta: O elemento apontado pelo índice head da fila
 - **Justificativa:** Por que escolheu essa abordagem?
+Resposta: Inserção e remoção em tempo constante O(1) sem necessidade de reordenar elementos
 
 **Estrutura para Clock:**
 - Como implementou o ponteiro circular?
+Resposta: Variável inteira clock_hand que itera de 0 a nframes-1 usando operação de módulo (%)
 - Como armazena e atualiza os R-bits?
+Resposta: Armazenados na struct Frame para acesso rápido durante a varredura. Se o bit for 1, é zerado (segunda chance); se 0, é a vítima
 - **Justificativa:** Por que escolheu essa abordagem?
+Resposta: Simula eficientemente o ponteiro do relógio sem necessidade de listas encadeadas complexas, mantendo sincronia com a tabela de páginas
 
 ### 2.2 Organização do Código
 
 Descreva como organizou seu código:
 
 - Quantos arquivos/módulos criou?
+  Resposta: Apenas um arquivo (simulador_memoria.c)
 - Qual a responsabilidade de cada arquivo/módulo?
+Resposta: Contém todas as definições de estruturas (Process, Frame, Queue), lógica de parsing dos arquivos de entrada, implementação dos algoritmos de substituição e o loop principal de execução
 - Quais são as principais funções e o que cada uma faz?
+Resposta: init_from_config: Lê o arquivo de configuração e aloca as estruturas iniciais. handle_access_fifo / handle_access_clock: Gerencia a lógica de hit/miss e orquestra a substituição para cada algoritmo. select_victim_fifo / select_victim_clock: Identifica qual frame será liberado. allocate_page_to_frame / deallocate_frame: Atualiza os metadados nos frames e nas tabelas de páginas dos processos.
 
 **Exemplo:**
 ```
@@ -100,8 +114,11 @@ simulador.c
 Explique **como** implementou a lógica FIFO:
 
 - Como mantém o controle da ordem de chegada?
+Resposta: Utiliza uma estrutura de Fila (Queue) onde os índices dos frames são inseridos no final (tail) assim que são preenchidos
 - Como seleciona a página vítima?
+Resposta: O algoritmo remove o índice que está no início (head) da fila, representando o frame que foi preenchido há mais tempo
 - Quais passos executa ao substituir uma página?
+Resposta: Remove o ID do frame vítima da fila. Desaloca a página antiga (atualiza tabela do processo antigo). Mapeia a nova página no frame liberado. Insere o ID deste frame novamente no final da fila (pois agora contém uma "nova" página).
 
 **Não cole código aqui.** Explique a lógica em linguagem natural.
 
@@ -110,9 +127,13 @@ Explique **como** implementou a lógica FIFO:
 Explique **como** implementou a lógica Clock:
 
 - Como gerencia o ponteiro circular?
+Resposta: Uma variável inteira (clock_hand) serve como índice no array de frames. Ela é incrementada a cada verificação e usa operação de módulo (%) para voltar ao zero quando atinge o limite
 - Como implementou a "segunda chance"?
+Resposta: Ao verificar um frame apontado pelo clock_hand: se o bit R for 1, o algoritmo muda o R para 0 e avança o ponteiro (dando a chance). Se o bit R for 0, este frame é eleito a vítima
 - Como trata o caso onde todas as páginas têm R=1?
+Resposta: O ponteiro percorre toda a lista zerando os bits (transformando 1 em 0). Ao retornar ao primeiro frame (agora com R=0), ele é selecionado como vítima
 - Como garante que o R-bit é setado em todo acesso?
+Resposta: Em qualquer acesso (seja Hit ou após um Page Fault), a função de acesso define explicitamente referenced = 1 tanto na estrutura do Frame quanto na entrada da Tabela de Páginas do processo.
 
 **Não cole código aqui.** Explique a lógica em linguagem natural.
 
@@ -122,12 +143,17 @@ Explique como seu código distingue e trata os dois cenários:
 
 **Cenário 1: Frame livre disponível**
 - Como identifica que há frame livre?
+Resposta: A função find_free_frame percorre o array global de frames; se encontrar um com occupied == 0, retorna seu índice
 - Quais passos executa para alocar a página?
+Resposta: O código marca o frame como ocupado, registra o PID e página no frame, atualiza a tabela de páginas do processo (bit V=1) e, no caso do FIFO, adiciona o índice à fila
 
 **Cenário 2: Memória cheia (substituição)**
 - Como identifica que a memória está cheia?
+Resposta: Quando a função find_free_frame retorna -1 após varrer todos os frames
 - Como decide qual algoritmo usar (FIFO vs Clock)?
+Resposta: A escolha do algoritmo é feita no início da main ao ler o argumento da linha de comando, chamando a função específica (handle_access_fifo ou handle_access_clock)
 - Quais passos executa para substituir uma página?
+Resposta: Seleção: Escolhe o frame vítima usando a lógica específica (remove da head da fila no FIFO ou varre ponteiro circular no Clock). Desalocação: Acessa o processo dono da página antiga e atualiza sua tabela de páginas (bit V=0, Frame=-1). Realocação: Sobrescreve os dados do frame com as informações da nova página e atualiza a tabela do novo processo (bit V=1).
 
 ---
 
