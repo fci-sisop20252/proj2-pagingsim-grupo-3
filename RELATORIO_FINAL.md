@@ -16,9 +16,8 @@
 
 Descreva EXATAMENTE como compilar seu projeto. Inclua todos os comandos necessários.
 
-**Exemplo:**
-```bash
-
+```
+cd /workspaces/proj2-pagingsim-grupo-3/tests
 gcc -o simulador simulador.c
 ```
 
