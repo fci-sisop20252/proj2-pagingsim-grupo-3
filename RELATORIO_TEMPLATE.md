@@ -7,7 +7,7 @@
 ## Integrantes do Grupo
 
 - Felipe Martha - 10437877
-- Guilhermo Martinez - 10418697
+- Guillermo Martinez - 10418697
 ---
 
 ## 1. Instruções de Compilação e Execução
@@ -175,21 +175,51 @@ Preencha a tabela abaixo com os resultados de pelo menos 3 testes diferentes:
 Com base nos resultados acima, responda:
 
 1. **Qual algoritmo teve melhor desempenho (menos page faults)?**
+Resposta: Nos três testes, FIFO e Clock tiveram exatamente o mesmo número de page faults.
+2. **Por que você acha que isso aconteceu?**
+   Resposta:Isso acontece porque:
 
-2. **Por que você acha que isso aconteceu?** Considere:
-   - Como cada algoritmo escolhe a vítima
-   - O papel do R-bit no Clock
-   - O padrão de acesso dos testes
+Quando não ocorre substituição, ambos são idênticos.
 
-3. **Em que situações Clock é melhor que FIFO?**
-   - Dê exemplos de padrões de acesso onde Clock se beneficia
+Quando ocorre substituição sem reutilização, Clock não consegue se beneficiar do R-bit.
 
-4. **Houve casos onde FIFO e Clock tiveram o mesmo resultado?**
-   - Por que isso aconteceu?
+A vantagem do Clock aparece apenas quando há localidade temporal verdadeira, e a memória é pequena demais para manter todas as páginas relevantes. Isso não ocorreu em nenhum dos seus testes.
+ 
+4. **Em que situações Clock é melhor que FIFO?**
+  Resposta: Clock supera FIFO quando:
 
-5. **Qual algoritmo você escolheria para um sistema real e por quê?**
+O programa acessa páginas em loops.
 
----
+O conjunto de páginas ativas é maior que o número de frames.
+
+Existem páginas que são reutilizadas várias vezes.
+
+5. **Houve casos onde FIFO e Clock tiveram o mesmo resultado?**
+Resposta: Sim, todos os testes tiveram resultados iguais.
+
+Isso aconteceu porque:
+
+Ou não havia substituição,
+
+Ou não havia localidade temporal,
+
+Ou a memória comportava todas as páginas acessadas,
+
+Ou o padrão de acesso anulava a vantagem do Clock.
+
+6. **Qual algoritmo você escolheria para um sistema real e por quê?**
+
+Resposta:Clock, porque:
+
+É simples.
+
+Evita substituir páginas recentemente usadas.
+
+Se aproxima de LRU com baixo custo.
+
+É amplamente usado em sistemas reais.
+
+Mesmo quando empata com FIFO, Clock nunca é pior, mas pode ser me
 
 ## 4. Desafios e Aprendizados
 
@@ -197,18 +227,91 @@ Com base nos resultados acima, responda:
 
 Descreva o maior desafio técnico que seu grupo enfrentou durante a implementação:
 
-- Qual foi o problema?
-- Como identificaram o problema?
-- Como resolveram?
-- O que aprenderam com isso?
+Resposta:
+
+Qual foi o problema?
+
+A parte mais complicada foi implementar:
+
+as tabelas de páginas,
+
+o vetor de frames,
+
+e a lógica completa do algoritmo Clock
+(ponteiro circular + bit R).
+
+Como identificaram o problema?
+
+Durante os testes iniciais, percebemos que:
+
+páginas eram substituídas na hora errada,
+
+o ponteiro não avançava corretamente,
+
+o bit R não estava sendo resetado na hora certa.
+
+Como resolveram?
+
+Revisamos o algoritmo original:
+
+Passar pelo vetor de frames em formato circular
+
+Verificar R
+
+Dar segunda chance se R=1
+
+Substituir apenas quando encontrar R=0
+
+Garantir wrap-around do ponteiro ((ptr+1) % num_frames)
+
+Testamos passo a passo com os arquivos pequenos do professor até o comportamento ficar correto.
+
+O que aprenderam?
+
+A importância de validar o algoritmo com casos simples antes dos grandes
+
+A dificuldade real de sincronizar ponteiros, bits e tabelas
+
+Que debugging em sistemas de memória exige observar o estado interno de cada frame
 
 ### 4.2 Principal Aprendizado
 
 Descreva o principal aprendizado sobre gerenciamento de memória que vocês tiveram com este projeto:
 
-- O que vocês não entendiam bem antes e agora entendem?
-- Como este projeto mudou sua compreensão de memória virtual?
-- Que conceito das aulas ficou mais claro após a implementação?
+Resposta:
+
+O que vocês não entendiam bem antes e agora entendem?
+
+Antes era difícil visualizar:
+
+como uma página entra na memória,
+
+como ocorre a substituição,
+
+e por que certos algoritmos são melhores que outros.
+
+Agora, ficou claro como:
+
+O bit R influencia a decisão
+
+FIFO pode tomar decisões ruins
+
+Clock imita LRU de maneira eficiente
+
+O conceito de localidade afeta fortemente o desempenho
+
+Como este projeto mudou a compreensão de vocês sobre memória virtual?
+
+Agora entendemos que memória virtual não é só “um conceito teórico” —
+é um mecanismo complexo que depende de:
+
+estruturas de dados
+
+políticas de substituição
+
+padrões de acesso do programa
+
+otimização de hardware (MMU, TLB, bits R e M)
 
 ---
 
@@ -247,11 +350,12 @@ Antes de submeter, verifique:
 ## Referências
 Liste aqui quaisquer referências que utilizaram para auxiliar na implementação (livros, artigos, sites, **links para conversas com IAs.**)
 
+Aulas 9 para frente em especifico as aulas 11 12 e 13 que nos ajudaram mais https://graduacao.mackenzie.br/course/view.php?id=27998
 
----
+Livro da ufrgs que nos ajudou a entender melhor este topico:
+http://www.inf.ufrgs.br/~asc/livro/secao65.pdf
 
-## Comentários Finais
-
-Use este espaço para quaisquer observações adicionais que julguem relevantes (opcional).
+Biblioteca dev no github que tambem nos ajudou:
+https://github.com/KAYOKG/BibliotecaDev
 
 ---
