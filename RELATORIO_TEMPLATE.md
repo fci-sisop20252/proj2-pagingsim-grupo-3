@@ -18,13 +18,8 @@ Descreva EXATAMENTE como compilar seu projeto. Inclua todos os comandos necessá
 
 **Exemplo:**
 ```bash
+
 gcc -o simulador simulador.c
-```
-
-ou
-
-```bash
-make
 ```
 
 ### 1.2 Execução
