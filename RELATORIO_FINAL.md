@@ -312,18 +312,18 @@ otimização de hardware (MMU, TLB, bits R e M)
 
 ## 5. Vídeo de Demonstração
 
-**Link do vídeo:** [Insira aqui o link para YouTube, Google Drive, etc.]
+**Link do vídeo:** https://youtu.be/v7wBx54QIxU
 
 ### Conteúdo do vídeo:
 
 Confirme que o vídeo contém:
 
-- [ ] Demonstração da compilação do projeto
-- [ ] Execução do simulador com algoritmo FIFO
-- [ ] Execução do simulador com algoritmo Clock
-- [ ] Explicação da saída produzida
-- [ ] Comparação dos resultados FIFO vs Clock
-- [ ] Breve explicação de uma decisão de design importante
+- [ ✅ ] Demonstração da compilação do projeto
+- [ ✅ ] Execução do simulador com algoritmo FIFO
+- [ ✅ ] Execução do simulador com algoritmo Clock
+- [ ✅ ] Explicação da saída produzida
+- [ ✅ ] Comparação dos resultados FIFO vs Clock
+- [ ✅ ] Breve explicação de uma decisão de design importante
 
 ---
 
@@ -331,15 +331,15 @@ Confirme que o vídeo contém:
 
 Antes de submeter, verifique:
 
-- [ ] Código compila sem erros conforme instruções da seção 1.1
-- [ ] Simulador funciona corretamente com FIFO
-- [ ] Simulador funciona corretamente com Clock
-- [ ] Formato de saída segue EXATAMENTE a especificação do ENUNCIADO.md
-- [ ] Testamos com os casos fornecidos em tests/
-- [ ] Todas as seções deste relatório foram preenchidas
-- [ ] Análise comparativa foi realizada com dados reais
-- [ ] Vídeo de demonstração foi gravado e link está funcionando
-- [ ] Todos os integrantes participaram e concordam com a submissão
+- [ ✅ ] Código compila sem erros conforme instruções da seção 1.1
+- [ ✅ ] Simulador funciona corretamente com FIFO
+- [ ✅ ] Simulador funciona corretamente com Clock
+- [ ✅ ] Formato de saída segue EXATAMENTE a especificação do ENUNCIADO.md
+- [  ✅] Testamos com os casos fornecidos em tests/
+- [ ✅ ] Todas as seções deste relatório foram preenchidas
+- [ ✅ ] Análise comparativa foi realizada com dados reais
+- [ ✅ ] Vídeo de demonstração foi gravado e link está funcionando
+- [ ✅ ] Todos os integrantes participaram e concordam com a submissão
 
 ---
 ## Referências
