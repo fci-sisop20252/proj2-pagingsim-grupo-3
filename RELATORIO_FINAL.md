@@ -28,12 +28,12 @@ Forneça exemplos completos de como executar o simulador.
 
 **Exemplo com FIFO:**
 ```bash
-./simulador fifo tests/config_1.txt tests/acessos_1.txt
+./simulador fifo config_1.txt acessos_1.txt
 ```
 
 **Exemplo com Clock:**
 ```bash
-./simulador clock tests/config_1.txt tests/acessos_1.txt
+./simulador clock config_1.txt acessos_1.txt
 ```
 
 ---
